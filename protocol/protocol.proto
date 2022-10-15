@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package protocol;
+
+option go_package = "github.com/jamesrobb/ably-takehome/protocol/generated/protocol";
+
+message NumbersRequest {
+    // UUIDv4 identifying the requesting client.
+    bytes client_id = 1;
+    uint32 num_numbers = 2;
+    // Used for debugging/testing purposes. Specifies the seed for the server's PRNG.
+    uint32 seed = 3;
+}
+
+message NumberResponse {
+    uint32 number = 1;
+    // When a NumberResponse is the last message for a NumbersRequest the checkum is set, otherwise it is an empty string.
+    string checksum = 2;
+}
+
+service Numbers {
+    rpc GetNumbers(NumbersRequest) returns (stream NumberResponse);
+}
